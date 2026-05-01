@@ -15,6 +15,6 @@ public class Caelum
 
     public Caelum()
     {
-        ModLoadingContext.get().registerConfig(ModConfig.Type.CLIENT, ConfigHelper.clientConfig);
+        modContainer.registerConfig(ModConfig.Type.CLIENT, ConfigHelper.clientConfig);
     }
 }

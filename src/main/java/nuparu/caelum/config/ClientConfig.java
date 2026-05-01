@@ -1,12 +1,10 @@
 package nuparu.caelum.config;
 
-import net.minecraftforge.common.ForgeConfigSpec;
-import net.minecraftforge.common.ForgeConfigSpec.BooleanValue;
-import net.minecraftforge.common.ForgeConfigSpec.EnumValue;
-import net.minecraftforge.common.ForgeConfigSpec.IntValue;
-import net.minecraftforge.common.ForgeConfigSpec.LongValue;
-import net.minecraftforge.common.ForgeConfigSpec.DoubleValue;
-
+import net.neoforged.neoforge.common.ModConfigSpec;
+import net.neoforged.neoforge.common.ModConfigSpec.LongValue;
+import net.neoforged.neoforge.common.ModConfigSpec.EnumValue;
+import net.neoforged.neoforge.common.ModConfigSpec.DoubleValue;
+import net.neoforged.neoforge.common.ModConfigSpec.BooleanValue;
 
 public class ClientConfig {
     public static LongValue lunarOrbitPeriod;
@@ -24,7 +22,7 @@ public class ClientConfig {
     public static DoubleValue starSize;
 
 
-    public static void init(ForgeConfigSpec.Builder client) {
+    public static void init(ModConfigSpec.Builder client) {
         lunarOrbitPeriod = client.comment("How long does it take for the Moon to complete its orbit in ticks.").defineInRange("moon.orbit_period",708734L, 1, Long.MAX_VALUE);
         earthOrbitPeriod = client.comment("How long does it take for the Earth to complete its orbit in ticks.").defineInRange("earth.orbit_period",8765812L, 0, Long.MAX_VALUE);
         starsType = client.comment("What stars to use").defineEnum("stars.stars_type", StarsType.CUSTOM, StarsType.values());
