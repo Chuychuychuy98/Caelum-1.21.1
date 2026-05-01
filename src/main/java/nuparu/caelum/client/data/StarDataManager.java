@@ -41,12 +41,12 @@ public class StarDataManager extends SimpleJsonResourceReloadListener {
         List<StellarData> stars = new ArrayList<>();
         for (Map.Entry<ResourceLocation, JsonElement> entry : objectIn.entrySet()) {
             DataResult<StellarDataList> dataResult = StellarDataList.CODEC.parse(JsonOps.INSTANCE, entry.getValue());
-            dataResult.get().ifLeft(stellarDataList -> {
+            dataResult.ifSuccess(stellarDataList -> {
                 if (stellarDataList.replace()) {
                     stars.clear();
                 }
                 stars.addAll(stellarDataList.stars());
-            }).ifRight((p_248506_) -> {
+            }).ifError((p_248506_) -> {
                 Caelum.LOGGER.warn("Failed to read stellar data {}", p_248506_.message());
             });
         }
@@ -71,22 +71,23 @@ public class StarDataManager extends SimpleJsonResourceReloadListener {
 
     private void createStars(List<StellarData> stars) {
         Tesselator tesselator = Tesselator.getInstance();
-        BufferBuilder bufferbuilder = tesselator.getBuilder();
+        // ORIGINAL:         BufferBuilder bufferbuilder = tesselator.getBuilder();
+        BufferBuilder bufferbuilder = tesselator.begin(VertexFormat.Mode.QUADS, DefaultVertexFormat.POSITION_COLOR);
         RenderSystem.setShader(GameRenderer::getPositionColorShader);
         if (starBuffer != null) {
             starBuffer.close();
         }
 
         starBuffer = new VertexBuffer(VertexBuffer.Usage.STATIC);
-        BufferBuilder.RenderedBuffer bufferbuilder$renderedbuffer = this.drawStars(bufferbuilder, stars);
+        BufferBuilder bufferbuilder$renderedbuffer = this.drawStars(bufferbuilder, stars);
         starBuffer.bind();
-        starBuffer.upload(bufferbuilder$renderedbuffer);
+        starBuffer.upload(bufferbuilder$renderedbuffer.buildOrThrow());
         VertexBuffer.unbind();
     }
 
-    private BufferBuilder.RenderedBuffer drawStars(BufferBuilder bufferBuilder, List<StellarData> stars) {
+    private BufferBuilder drawStars(BufferBuilder bufferBuilder, List<StellarData> stars) {
         RandomSource randomSource = RandomSource.create(10842L);
-        bufferBuilder.begin(VertexFormat.Mode.QUADS, DefaultVertexFormat.POSITION_COLOR);
+        //bufferBuilder.begin(VertexFormat.Mode.QUADS, DefaultVertexFormat.POSITION_COLOR);
         double maxMagnitude = stars.stream().mapToDouble(StellarData::magnitude).max().orElse(1.0);
         double minMagnitude = stars.stream().mapToDouble(StellarData::magnitude).min().orElse(0.0);
 
@@ -152,11 +153,11 @@ public class StarDataManager extends SimpleJsonResourceReloadListener {
                 double d25 = d24 * d9 - d22 * d10;
                 double d26 = d22 * d9 + d24 * d10;
 
-                bufferBuilder.vertex(d5 + d25, d6 + d23, d7 + d26).color(red, green, blue, (int) ((1 - normalizedMagnitude) * 255)).endVertex();
+                bufferBuilder.addVertex((float) (d5 + d25), (float) (d6 + d23), (float) (d7 + d26)).setColor(red, green, blue, (int) ((1 - normalizedMagnitude) * 255));
             }
         }
 
-        return bufferBuilder.end();
+        return bufferBuilder;
     }
 
     public VertexBuffer getStarBuffer() {
