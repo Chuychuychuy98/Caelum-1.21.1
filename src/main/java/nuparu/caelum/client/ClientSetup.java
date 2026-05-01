@@ -1,17 +1,15 @@
 package nuparu.caelum.client;
 
-import net.minecraft.client.Minecraft;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.client.event.RegisterGuiOverlaysEvent;
-import net.minecraftforge.eventbus.api.SubscribeEvent;
-import net.minecraftforge.fml.common.Mod;
+import net.neoforged.api.distmarker.Dist;
+import net.neoforged.bus.api.SubscribeEvent;
+import net.neoforged.fml.common.EventBusSubscriber;
+import net.neoforged.neoforge.client.event.RegisterGuiLayersEvent;
 import nuparu.caelum.Caelum;
-import nuparu.caelum.client.overlay.DebugOverlay;
 
-@Mod.EventBusSubscriber(modid= Caelum.MODID, value = Dist.CLIENT, bus = Mod.EventBusSubscriber.Bus.MOD)
+@EventBusSubscriber(modid= Caelum.MODID, value = Dist.CLIENT)
 public class ClientSetup {
     @SubscribeEvent
-    public static void registerGuiOverlays(RegisterGuiOverlaysEvent event) {
+    public static void registerGuiOverlays(RegisterGuiLayersEvent event) { // Note: This appears to be the right event, but I'm not 100% sure as it doesn't do anything as of yet anyway.
         //event.registerAboveAll(Caelum.MODID+"__debug", new DebugOverlay(Minecraft.getInstance()));
     }
 }
