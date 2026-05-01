@@ -19,6 +19,6 @@ public class MixinFogRenderer {
     }
     @Redirect(at = @At(value = "INVOKE", target = "Lorg/joml/Vector3f;dot(Lorg/joml/Vector3fc;)F", ordinal = 0, remap = false), method = "setupColor(Lnet/minecraft/client/Camera;FLnet/minecraft/client/multiplayer/ClientLevel;IF)V")
     private static float setupColor$sunVector(Vector3f instance, Vector3fc v) {
-        return instance.dot(SkyUtils.sunVector(Minecraft.getInstance().level, Minecraft.getInstance().getCameraEntity().position().z(), DeltaTracker.Timer.ZERO.getGameTimeDeltaPartialTick(true)));//TODO: check this!
+        return instance.dot(SkyUtils.sunVector(Minecraft.getInstance().level, Minecraft.getInstance().getCameraEntity().position().z(), DeltaTracker.Timer.ZERO.getGameTimeDeltaPartialTick(true)));
     }
 }
